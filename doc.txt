@@ -1,0 +1,85 @@
+Job02 :
+
+Installation de ProFTPD:
+apt-get update
+apt-get install proftpd
+
+
+
+Repérez où sont les fichiers de configuration et les commandes pour lancer/arreter/monitorer votre service FTP:
+
+Dans une installation standard de ProFTPD sur une machine virtuelle Debian, les fichiers de configuration sont situés 
+dans le répertoire /etc/proftpd/. Voici quelques-uns des fichiers les plus importants :
+
+/etc/proftpd/proftpd.conf : c'est le fichier de configuration principal de ProFTPD, il 
+contient les paramètres de configuration globaux pour le serveur FTP.
+
+/etc/proftpd/modules.conf : ce fichier contient la liste des modules de ProFTPD à charger.
+
+/etc/proftpd/conf.d/ : c'est le répertoire qui contient des fichiers de configuration supplémentaires pour ProFTPD, 
+tels que des fichiers pour configurer l'authentification, les restrictions d'accès, etc.
+
+démarrer : 
+
+systemctl start proftpd
+
+check :
+
+systemctl status proftpd
+
+redémarrer : 
+
+systemctl restart proftpd
+
+
+
+Autres options : 
+
+config du firewall sur les ports 20 et 21 :
+
+sudo ufw allow 21/tcp
+sudo ufw allow 20/tcp
+
+Job03 :
+
+Pour ajouter des utilisateurs à votre serveur FTP ProFTPD sur une machine virtuelle Debian, vous pouvez suivre ces étapes :
+
+Ouvrez une session en tant qu'utilisateur root sur votre machine virtuelle Debian.
+
+Créez un nouvel utilisateur en utilisant la commande suivante :
+
+sudo adduser username
+
+
+Remplacez "username" par le nom d'utilisateur que vous souhaitez créer.
+
+Vous serez invité à entrer un mot de passe pour l'utilisateur. Entrez un mot de passe sécurisé et répétez-le pour confirmation.
+
+Vous pouvez également définir d'autres informations pour l'utilisateur, telles que le nom complet, le numéro de téléphone, etc. 
+Ces informations ne sont pas obligatoires.
+
+Pour accorder l'accès au serveur FTP à l'utilisateur que vous venez de créer, vous devez modifier le fichier de configuration 
+de ProFTPD (/etc/proftpd/proftpd.conf). Vous pouvez ajouter les lignes suivantes pour autoriser l'utilisateur à se connecter :
+<Global>
+   AllowUser username
+</Global>
+
+puis restart proftpd
+
+Job04 :
+
+Pour autoriser les connexions anonymes, vous devez ajouter les lignes suivantes au fichier de configuration de ProFTPD 
+(/etc/proftpd/proftpd.conf) :
+
+<Anonymous ~ftp>
+   User ftp
+   Group nogroup
+   AnonRequirePassword off
+   AnonRoot /path/to/anonymous/folder
+</Anonymous>
+
+Job05 :
+
+Pour téléverser des fichiers entre le serveur vers le client et vis versa, il suffit de faire glisser le ou les fichiers.
+
+
