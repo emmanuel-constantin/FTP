@@ -82,4 +82,50 @@ Job05 :
 
 Pour téléverser des fichiers entre le serveur vers le client et vis versa, il suffit de faire glisser le ou les fichiers.
 
+Job06 :
+Bug
 
+Job07:
+
+Pour configurer un serveur DNS sur une machine Debian et associer l'adresse IP du serveur au nom de domaine local "dnsproject.prepa.com", vous pouvez utiliser le serveur DNS BIND (Berkeley Internet Name Domain). Voici les étapes générales pour configurer BIND sur votre VM serveur :
+
+Assurez-vous que votre serveur dispose d'une adresse IP statique. Vous pouvez le configurer dans le fichier de configuration réseau (**`/etc/network/interfaces`**).
+
+Installez le paquet BIND9 en utilisant la commande suivante :
+
+***sudo apt-get update
+sudo apt-get install bind9***
+
+Une fois l'installation terminée, ouvrez le fichier de configuration principal de BIND :
+
+***sudo nano /etc/bind/named.conf.local***
+
+Ajoutez les lignes suivantes dans le fichier :
+
+***zone "[dnsproject.prepa.com](http://dnsproject.prepa.com/)" {
+type master;
+file "/etc/bind/db.dnsproject";
+};***
+
+Enregistrez et fermez le fichier. Ensuite, créez le fichier de zone pour "dnsproject.prepa.com" :
+
+***sudo nano /etc/bind/db.dnsproject***
+
+Ajoutez les entrées suivantes dans le fichier de zone :
+
+***$TTL 86400
+@       IN      SOA     [dnsproject.prepa.com](http://dnsproject.prepa.com/). [admin.dnsproject.prepa.com](http://admin.dnsproject.prepa.com/). (
+2023051301      ; Serial
+3600            ; Refresh
+1800            ; Retry
+604800          ; Expire
+86400           ; Minimum TTL
+)
+@       IN      NS      [dnsproject.prepa.com](http://dnsproject.prepa.com/).
+@       IN      A       <adresse IP de votre serveur>***
+
+Assurez-vous de remplacer "<adresse IP de votre serveur>" par l'adresse IP réelle de votre serveur.
+
+Enregistrez et fermez le fichier.
+
+Redémarrez le service BIND pour appliquer les modifications
